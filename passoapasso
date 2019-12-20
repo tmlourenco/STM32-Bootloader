@@ -1,0 +1,38 @@
+Once a day, consult the server for updates. 
+If there is some, download via FTP, and store on FS of LTE module.
+Set minimal configuration of UART(for bootloader communication).
+
+
+*****************************
+*****   Process to IAP  *****
+*****************************
+
+
+First of all is made a software reset to init the boot process
+
+STM32L43xxxx devices can use the Pattern 6, one without use of physical pin state
+
+Pattern 6
+
+nBoot0(bit) = 0, nBoot1(bit) = 1, nBoot0_SW(bit) = 0
+
+Ao salvar esses valores, nos especificos endereços, e
+
+Essa configuração de nBoot0 e nBoot1 garante que o sistema inicie na System Memory, local onde fica salvo o Bootloader da aplicação.
+
+A atualização remota em ambos os rastreadores(basicao e o outro), é utilizada a USART1 para bootloader, pois é a interface de comunicação com o módulo BG96, de onde vem o arquivo binário de atualização.
+
+*** Testar a condição de entrada no bootloader sem a utilização do Pino físico PH3, BOOT0
+
+
+After this test, if pattern was OK
+
+1 -- Shut down any tasks running
+
+2 -- Switch to the HSI clock source - no PLL
+
+3 -- Disable all interrupts
+
+4 -- Ste the Main Stack Pointer(MSP) to it's default value
+
+5 -- Load the Program Counter(PC) with the System Memory reset vector 
